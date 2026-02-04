@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Product API Test Suite" parallel="false">
+
+    <test name="Product Positive Tests" preserve-order="true">
+        <classes>
+            <class name="tests.ProductTest"/>
+        </classes>
+    </test>
+
+    <test name="Product Data Provider Tests">
+        <classes>
+            <class name="tests.ProductDataProviderTest"/>
+        </classes>
+    </test>
+
+    <test name="Product Negative Tests">
+        <classes>
+            <class name="tests.ProductNegativeTest"/>
+        </classes>
+    </test>
+
+</suite>
