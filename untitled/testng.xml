@@ -4,19 +4,19 @@
 
     <test name="Product Positive Tests" preserve-order="true">
         <classes>
-            <class name="tests.ProductTest"/>
+            <class name="tests.api.ProductTest"/>
         </classes>
     </test>
 
     <test name="Product Data Provider Tests">
         <classes>
-            <class name="tests.ProductDataProviderTest"/>
+            <class name="tests.api.ProductDataProviderTest"/>
         </classes>
     </test>
 
     <test name="Product Negative Tests">
         <classes>
-            <class name="tests.ProductNegativeTest"/>
+            <class name="tests.api.ProductNegativeTest"/>
         </classes>
     </test>
 

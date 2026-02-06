@@ -1,4 +1,4 @@
-package tests;
+package tests.api;
 
 import client.ProductClient;
 import io.restassured.response.Response;
