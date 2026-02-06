@@ -20,4 +20,16 @@
         </classes>
     </test>
 
+    <test name="Login Page Test">
+        <classes>
+            <class name="uiTests.LoginTest"/>
+        </classes>
+    </test>
+
+    <test name="SignUp Page Test">
+        <classes>
+            <class name="uiTests.SignUpPageTest"/>
+        </classes>
+    </test>
+
 </suite>
