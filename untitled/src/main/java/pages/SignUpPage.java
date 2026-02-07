@@ -4,10 +4,13 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.Random;
+
 public class SignUpPage extends BasePage{
     public SignUpPage(WebDriver driver) {
         super(driver);
     }
+
     private final static String URL = "https://automationexercise.com/login";
 
     private final By sectionTitle1 = By.xpath("//h2[text()='New User Signup!']\n");
@@ -19,7 +22,6 @@ public class SignUpPage extends BasePage{
     private final By sectionTitle2 = By.cssSelector(".title");
     private final By genderTitleMale = By.id("uniform-id_gender1");
     private final By nameInput = By.id("name");
-    private final By emailInput = By.id("email");
     private final By password = By.id("password");
     private final By day = By.id("days");
     private final By month = By.id("months");
@@ -41,6 +43,8 @@ public class SignUpPage extends BasePage{
 
     private final By createAccountBtn = By.cssSelector(".btn-default");
 
+    private final By successMessage = By.xpath("//b[text()='Account Created!']");
+
     @Step("Open page")
     public SignUpPage open(){
         driver.get(URL);
@@ -58,6 +62,7 @@ public class SignUpPage extends BasePage{
         return this;
     }
 
+    //email prefix will be generated as a random number
     @Step("Enter email")
     public SignUpPage enterEmail(String text){
         type(email, text);
@@ -85,12 +90,6 @@ public class SignUpPage extends BasePage{
     @Step("Enter name")
     public SignUpPage enterSignupName(String text){
         type(nameInput, text);
-        return this;
-    }
-
-    @Step("Enter Email")
-    public SignUpPage enterSignupEmail(String text){
-        type(emailInput, text);
         return this;
     }
 
@@ -199,4 +198,11 @@ public class SignUpPage extends BasePage{
     public void clickButton(){
         click(createAccountBtn);
     }
+
+    @Step("Get Success Message")
+    public SignUpPage getSuccessMessage(){
+        getText(successMessage);
+        return this;
+    }
+
 }

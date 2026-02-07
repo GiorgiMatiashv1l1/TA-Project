@@ -18,7 +18,7 @@ public class SignUpPageTest extends BaseTest {
 
         signUpPage.open().checkTitle1();
         signUpPage.enterName("Giorgi")
-                        .enterEmail("23202245@ibsu.edu.ge")
+                        .enterEmail("232012@ibsu.edu.ge")
                         .clickSignupBtn();
 
 
@@ -42,5 +42,7 @@ public class SignUpPageTest extends BaseTest {
                 .enterZipcode("0144")
                 .enterMobileNumber("551500934")
                 .clickButton();
+        signUpPage.getSuccessMessage();
+
     }
 }
