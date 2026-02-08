@@ -56,6 +56,10 @@ public class BasePage {
         select.selectByIndex(index);
     }
 
+     protected boolean isVisible(WebElement element) {
+        return wait.until(ExpectedConditions.visibilityOf(element)).isDisplayed();
+    }
+
     protected void ScrollToElement(By locator) {
         WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         js.executeScript("arguments[0].scrollIntoView({block:'center'});", el);
