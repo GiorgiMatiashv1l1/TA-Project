@@ -13,5 +13,11 @@
             <class name="uiTests.LoginPageTest"/>
         </classes>
     </test>
+
+<!--    <test name="Log in Test">-->
+<!--        <classes>-->
+<!--            <class name="uiTests.InvalidLoginTest"/>-->
+<!--        </classes>-->
+<!--    </test>-->
     
 </suite>

@@ -1,9 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -15,6 +12,7 @@ public class BasePage {
     protected WebDriver driver;
     protected WebDriverWait wait;
     protected JavascriptExecutor js;
+    protected Alert alert;
 
     public BasePage(WebDriver driver){
         this.driver = driver;
@@ -64,4 +62,11 @@ public class BasePage {
         WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         js.executeScript("arguments[0].scrollIntoView({block:'center'});", el);
     }
+
+    protected void uploadFile(By locator, String absoluteFilePath) {
+        WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+        assert fileInput != null;
+        fileInput.sendKeys(absoluteFilePath);
+    }
+
 }

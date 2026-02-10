@@ -200,9 +200,8 @@ public class SignUpPage extends BasePage{
     }
 
     @Step("Get Success Message")
-    public SignUpPage getSuccessMessage(){
-        getText(successMessage);
-        return this;
+    public String getSuccessMessage(){
+       return getText(successMessage);
     }
 
 }
