@@ -14,10 +14,22 @@
         </classes>
     </test>
 
-<!--    <test name="Log in Test">-->
-<!--        <classes>-->
-<!--            <class name="uiTests.InvalidLoginTest"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="Invalid Log in Test">
+        <classes>
+            <class name="uiTests.InvalidLoginTest"/>
+        </classes>
+    </test>
+
+    <test name="Contact Form Test">
+        <classes>
+            <class name="uiTests.ContactUsTest"/>
+        </classes>
+    </test>
+
+    <test name="Product Review Test">
+        <classes>
+            <class name="uiTests.ProductReviewTest"/>
+        </classes>
+    </test>
     
 </suite>
