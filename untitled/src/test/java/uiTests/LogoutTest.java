@@ -4,6 +4,7 @@ import base.BaseTest;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
 import pages.LoginPage;
@@ -18,11 +19,22 @@ public class LogoutTest extends BaseTest {
         LoginPage loginPage = new LoginPage(driver);
         HomePage homePage = new HomePage(driver);
 
+        homePage.open();
+        Assert.assertTrue(homePage.isHomePageVisible());
+
+        homePage.clickLoginSignup();
+
+        Assert.assertTrue(loginPage.isLoginFormVisible());
+
         loginPage.open()
                 .enterEmail("232022@ibsu.edu.ge")
                 .enterPassword("password")
                 .clickLoginBtn();
 
+        Assert.assertTrue(homePage.isLoggedInAsVisible());
+
         homePage.logout();
+
+        Assert.assertTrue(loginPage.isLoginFormVisible());
     }
 }

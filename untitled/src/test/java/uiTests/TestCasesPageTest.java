@@ -16,13 +16,13 @@ public class TestCasesPageTest extends BaseTest {
     @Test
     @Story("Test Case 7 - Verify Test Cases Page")
     public void testCasesPageTest() {
-        driver.get("https://automationexercise.com");
-
         HomePage homePage = new HomePage(driver);
         TestCasesPage testCasesPage = new TestCasesPage(driver);
 
-        homePage.openTestCases();
+        homePage.open();
+        Assert.assertTrue(homePage.isHomePageVisible());
 
+        homePage.openTestCases();
         Assert.assertTrue(testCasesPage.isPageVisible());
     }
 }
