@@ -25,10 +25,17 @@ public class LoginPage extends BasePage{
     private final By password = By.xpath("//input[@data-qa='login-password']\n");
     private final By loginBtn = By.xpath("//button[@data-qa='login-button']\n");
 
+    private final By loginFormHeading = By.xpath("//h2[text()='Login to your account']");
+
     @Step("Open URL")
     public LoginPage open(){
         driver.get(URL);
         return this;
+    }
+
+    @Step("Verify login form is visible")
+    public boolean isLoginFormVisible() {
+        return isVisible(driver.findElement(loginFormHeading));
     }
 
     @Step("Enter Login Email")

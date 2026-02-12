@@ -13,6 +13,8 @@ public class HomePage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
+    private static final String URL = "https://automationexercise.com";
+
     @FindBy(css = "a[href='/logout']")
     WebElement logoutBtn;
 
@@ -22,8 +24,34 @@ public class HomePage extends BasePage {
     @FindBy(css = "a[href='/test_cases']")
     WebElement testCasesLink;
 
+    @FindBy(css = "a[href='/login']")
+    WebElement loginSignupLink;
+
+    @FindBy(id = "slider-carousel")
+    WebElement slider;
+
+    @FindBy(xpath = "//a[contains(text(),' Logged in as ')]")
+    WebElement loggedInAsText;
+
+    public HomePage open() {
+        driver.get(URL);
+        return this;
+    }
+
+    public boolean isHomePageVisible() {
+        return isVisible(slider);
+    }
+
+    public void clickLoginSignup() {
+        loginSignupLink.click();
+    }
+
     public void logout() {
         logoutBtn.click();
+    }
+
+    public boolean isLoggedInAsVisible() {
+        return isVisible(loggedInAsText);
     }
 
     public void openProducts() {
