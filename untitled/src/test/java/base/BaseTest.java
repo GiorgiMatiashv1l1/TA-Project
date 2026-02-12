@@ -11,6 +11,10 @@ import util.DriverFactory;
 public abstract class BaseTest {
     protected WebDriver driver;
 
+    public WebDriver getDriver() {
+        return driver;
+    }
+
     @BeforeMethod
     public void setup(){
         driver = DriverFactory.createChrome();

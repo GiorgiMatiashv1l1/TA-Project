@@ -4,11 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
 
 public class ProductsPage extends BasePage {
 
     public ProductsPage(WebDriver driver) {
         super(driver);
+        PageFactory.initElements(driver, this);
     }
 
     @FindBy(className = "features_items")
@@ -34,16 +36,17 @@ public class ProductsPage extends BasePage {
     }
 
     public void openFirstProduct() {
-        click((By) firstProduct);
+        firstProduct.click();
     }
 
     public void searchProduct(String product) {
-        type((By) searchBox, product);
-        click((By) searchBtn);
+        searchBox.clear();
+        searchBox.sendKeys(product);
+        searchBtn.click();
     }
 
     public void addProductToCart() {
-        click((By) addToCartBtn);
-        click((By) viewCart);
+        addToCartBtn.click();
+        viewCart.click();
     }
 }
