@@ -40,7 +40,8 @@ public class ProductsPage extends BasePage {
     }
 
     public void searchProduct(String product) {
-        type((By) searchBox, product);
+        searchBox.clear();
+        searchBox.sendKeys(product);
         searchBtn.click();
     }
 
