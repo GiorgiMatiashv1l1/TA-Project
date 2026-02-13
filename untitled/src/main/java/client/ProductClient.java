@@ -46,4 +46,12 @@ public class ProductClient {
                 .when()
                 .delete("/product/{productId}");
     }
+
+    public Response searchProduct(String searchProduct) {
+        return given()
+                .spec(RequestSpecFactory.defaultJsonSpec())
+                .queryParam("search_product", searchProduct)
+                .when()
+                .post("/api/searchProduct");
+    }
 }
