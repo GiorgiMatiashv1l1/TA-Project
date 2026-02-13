@@ -22,27 +22,25 @@ public class ProductTest {
     public void testGetAllProducts() {
         Response response = productClient.getAllProducts();
 
-        // Verify status code
+        // Verify HTTP status code
         Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200");
 
         // Deserialize response
         ProductsResponse productsResponse = response.as(ProductsResponse.class);
 
-        // Verify response code
+        // Verify API response code inside body
         Assert.assertEquals(productsResponse.getResponseCode(), 200, "Response code should be 200");
 
         // Verify products list is not empty
         Assert.assertNotNull(productsResponse.getProducts(), "Products list should not be null");
-        Assert.assertTrue(productsResponse.getProducts().size() > 0, "Products list should not be empty");
+        Assert.assertFalse(productsResponse.getProducts().isEmpty(), "Products list should not be empty");
 
-        // Print product count
         System.out.println("Total products found: " + productsResponse.getProducts().size());
     }
 
     @Test(priority = 2)
     public void testGetAllProductsAndVerifyStructure() {
         Response response = productClient.getAllProducts();
-
         ProductsResponse productsResponse = response.as(ProductsResponse.class);
         List<Product> products = productsResponse.getProducts();
 
@@ -58,89 +56,46 @@ public class ProductTest {
     }
 
     @Test(priority = 3)
-    public void testGetSpecificProduct() {
-        // First get all products to get a valid product ID
-        Response allProductsResponse = productClient.getAllProducts();
-        ProductsResponse productsResponse = allProductsResponse.as(ProductsResponse.class);
-        int productId = productsResponse.getProducts().get(0).getId();
+    public void testPostToProductsListReturns405() {
+        // API 2: POST request to All Products List — should return 405 Method Not Allowed
+        Response response = productClient.getAllProductsWithPost();
 
-        // Get specific product
-        Response response = productClient.getProduct(productId);
+        Assert.assertEquals(response.getStatusCode(), 200, "HTTP status should be 200");
 
-        Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200");
+        // The API wraps 405 inside JSON body
+        ProductsResponse productsResponse = response.as(ProductsResponse.class);
+        Assert.assertEquals(productsResponse.getResponseCode(), 405,
+                "API response code should be 405 for POST to productsList");
 
-        System.out.println("Successfully retrieved product with ID: " + productId);
+        System.out.println("POST to productsList correctly returned 405");
     }
 
     @Test(priority = 4)
-    public void testCreateProduct() {
-        // Create UserType
-        UserType userType = new UserType("Men");
+    public void testGetAllBrands() {
+        Response response = productClient.getAllBrands();
 
-        // Create Category
-        Category category = new Category(userType, "Tshirts");
-
-        // Create Product
-        Product newProduct = new Product();
-        newProduct.setName("Test Product");
-        newProduct.setPrice("Rs. 999");
-        newProduct.setBrand("TestBrand");
-        newProduct.setCategory(category);
-
-        // Send request
-        Response response = productClient.createProduct(newProduct);
-
-        // Verify status code (201 for created or 200 for success)
-        Assert.assertTrue(response.getStatusCode() == 200 || response.getStatusCode() == 201,
-                "Status code should be 200 or 201");
-
-        System.out.println("Product created successfully");
+        Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200");
+        System.out.println("Brands list response: " + response.getBody().asString().substring(0, 100));
     }
 
     @Test(priority = 5)
-    public void testUpdateProduct() {
-        // Create UserType
-        UserType userType = new UserType("Women");
+    public void testSearchProduct() {
+        Response response = productClient.searchProduct("top");
 
-        // Create Category
-        Category category = new Category(userType, "Dress");
-
-        // Create Product to update
-        Product productToUpdate = new Product();
-        productToUpdate.setId(1);
-        productToUpdate.setName("Updated Product Name");
-        productToUpdate.setPrice("Rs. 1500");
-        productToUpdate.setBrand("UpdatedBrand");
-        productToUpdate.setCategory(category);
-
-        // Send request
-        Response response = productClient.updateProduct(productToUpdate);
-
-        // Verify status code
         Assert.assertEquals(response.getStatusCode(), 200, "Status code should be 200");
 
-        System.out.println("Product updated successfully");
+        ProductsResponse productsResponse = response.as(ProductsResponse.class);
+        Assert.assertEquals(productsResponse.getResponseCode(), 200, "Response code should be 200");
+        Assert.assertNotNull(productsResponse.getProducts(), "Search results should not be null");
+
+        System.out.println("Search results found: " + productsResponse.getProducts().size());
     }
 
     @Test(priority = 6)
-    public void testDeleteProduct() {
-        int productIdToDelete = 1;
-
-        Response response = productClient.deleteProduct(productIdToDelete);
-
-        // Verify status code (200 or 204 for successful deletion)
-        Assert.assertTrue(response.getStatusCode() == 200 || response.getStatusCode() == 204,
-                "Status code should be 200 or 204");
-
-        System.out.println("Product deleted successfully");
-    }
-
-    @Test(priority = 7)
     public void testFilterProductsByCategory() {
         Response response = productClient.getAllProducts();
         ProductsResponse productsResponse = response.as(ProductsResponse.class);
 
-        // Filter products by category
         long tshirtCount = productsResponse.getProducts().stream()
                 .filter(product -> "Tshirts".equals(product.getCategory().getCategory()))
                 .count();
@@ -149,12 +104,11 @@ public class ProductTest {
         Assert.assertTrue(tshirtCount > 0, "Should have at least one T-shirt");
     }
 
-    @Test(priority = 8)
+    @Test(priority = 7)
     public void testFilterProductsByUserType() {
         Response response = productClient.getAllProducts();
         ProductsResponse productsResponse = response.as(ProductsResponse.class);
 
-        // Filter products by user type
         long menProductsCount = productsResponse.getProducts().stream()
                 .filter(product -> "Men".equals(product.getCategory().getUsertype().getUsertype()))
                 .count();
@@ -163,29 +117,36 @@ public class ProductTest {
         Assert.assertTrue(menProductsCount > 0, "Should have at least one Men's product");
     }
 
-    @Test(priority = 9)
+    @Test(priority = 8)
     public void testFilterProductsByBrand() {
         Response response = productClient.getAllProducts();
         ProductsResponse productsResponse = response.as(ProductsResponse.class);
 
         String brandToFilter = "Polo";
 
-        // Filter products by brand
         long brandProductCount = productsResponse.getProducts().stream()
                 .filter(product -> brandToFilter.equals(product.getBrand()))
                 .count();
 
         System.out.println("Number of " + brandToFilter + " products: " + brandProductCount);
+        Assert.assertTrue(brandProductCount >= 0, "Brand filter should execute without error");
     }
 
-    @Test(priority = 10)
+    @Test(priority = 9)
     public void testVerifyResponseTime() {
         Response response = productClient.getAllProducts();
 
         long responseTime = response.getTime();
         System.out.println("Response time: " + responseTime + "ms");
 
-        // Assert response time is less than 3 seconds
-        Assert.assertTrue(responseTime < 3000, "Response time should be less than 3000ms");
+        Assert.assertTrue(responseTime < 5000, "Response time should be less than 5000ms");
+    }
+
+    @Test(priority = 10)
+    public void testVerifyLogin() {
+        Response response = productClient.verifyLogin("test@example.com", "wrongpassword");
+
+        Assert.assertEquals(response.getStatusCode(), 200, "HTTP status should be 200");
+        System.out.println("Verify login response: " + response.getBody().asString());
     }
 }

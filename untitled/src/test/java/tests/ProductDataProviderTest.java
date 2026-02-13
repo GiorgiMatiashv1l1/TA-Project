@@ -2,9 +2,7 @@ package tests;
 
 import client.ProductClient;
 import io.restassured.response.Response;
-import model.Category;
-import model.Product;
-import model.UserType;
+import model.ProductsResponse;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -19,56 +17,52 @@ public class ProductDataProviderTest {
         productClient = new ProductClient();
     }
 
-    @DataProvider(name = "productData")
-    public Object[][] productData() {
+    @DataProvider(name = "searchTerms")
+    public Object[][] searchTerms() {
         return new Object[][]{
-                {"Test Product 1", "Rs. 500", "Brand1", "Men", "Tshirts"},
-                {"Test Product 2", "Rs. 1000", "Brand2", "Women", "Dress"},
-                {"Test Product 3", "Rs. 750", "Brand3", "Kids", "Tops & Shirts"}
+                {"top"},
+                {"dress"},
+                {"tshirt"},
+                {"jeans"}
         };
     }
 
-    @Test(dataProvider = "productData")
-    public void testCreateMultipleProducts(String name, String price, String brand,
-                                           String userTypeValue, String categoryValue) {
-        // Create UserType
-        UserType userType = new UserType(userTypeValue);
-
-        // Create Category
-        Category category = new Category(userType, categoryValue);
-
-        // Create Product
-        Product product = new Product();
-        product.setName(name);
-        product.setPrice(price);
-        product.setBrand(brand);
-        product.setCategory(category);
-
-        // Send request
-        Response response = productClient.createProduct(product);
-
-        // Verify
-        Assert.assertTrue(response.getStatusCode() == 200 || response.getStatusCode() == 201,
-                "Product creation failed for: " + name);
-
-        System.out.println("Created product: " + name);
-    }
-
-    @DataProvider(name = "invalidProductIds")
-    public Object[][] invalidProductIds() {
+    @DataProvider(name = "invalidCredentials")
+    public Object[][] invalidCredentials() {
         return new Object[][]{
-                {-1},
-                {0},
-                {99999}
+                {"invalid1@test.com", "wrongpass1"},
+                {"invalid2@test.com", "wrongpass2"},
+                {"notanemail",        "anypassword"}
         };
     }
 
-    @Test(dataProvider = "invalidProductIds")
-    public void testGetProductWithInvalidId(int productId) {
-        Response response = productClient.getProduct(productId);
+    @Test(dataProvider = "searchTerms", priority = 1)
+    public void testSearchProductWithMultipleTerms(String searchTerm) {
+        Response response = productClient.searchProduct(searchTerm);
 
-        // Expecting 404 or 400 for invalid IDs
-        Assert.assertTrue(response.getStatusCode() == 404 || response.getStatusCode() == 400,
-                "Should return error for invalid product ID: " + productId);
+        Assert.assertEquals(response.getStatusCode(), 200,
+                "Status code should be 200 for search term: " + searchTerm);
+
+        ProductsResponse productsResponse = response.as(ProductsResponse.class);
+        Assert.assertEquals(productsResponse.getResponseCode(), 200,
+                "API response code should be 200 for search term: " + searchTerm);
+
+        System.out.println("Search '" + searchTerm + "' returned "
+                + productsResponse.getProducts().size() + " results");
+    }
+
+    @Test(dataProvider = "invalidCredentials", priority = 2)
+    public void testVerifyLoginWithInvalidCredentials(String email, String password) {
+        Response response = productClient.verifyLoginWithInvalidDetails(email, password);
+
+        Assert.assertEquals(response.getStatusCode(), 200,
+                "HTTP status should be 200 for email: " + email);
+
+        String body = response.getBody().asString();
+        Assert.assertTrue(body.contains("404") || body.contains("User not found")
+                        || body.contains("400"),
+                "Should return error for invalid credentials: " + email);
+
+        System.out.println("✓ Invalid login '" + email + "' correctly rejected");
     }
 }

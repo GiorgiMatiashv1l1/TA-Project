@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Product API Test Suite" parallel="false">
+<suite name="UI Test Suite" parallel="false">
+
+    <listeners>
+        <listener class-name="base.AllureListener"/>
+    </listeners>
 
     <test name="Sign Up Test" preserve-order="true">
         <classes>
@@ -20,9 +24,33 @@
         </classes>
     </test>
 
+    <test name="Logout Test">
+        <classes>
+            <class name="uiTests.LogoutTest"/>
+        </classes>
+    </test>
+
     <test name="Contact Form Test">
         <classes>
             <class name="uiTests.ContactUsTest"/>
+        </classes>
+    </test>
+
+    <test name="All Products Test">
+        <classes>
+            <class name="uiTests.AllProductsTest"/>
+        </classes>
+    </test>
+
+    <test name="Search Product Test">
+        <classes>
+            <class name="uiTests.SearchProductTest"/>
+        </classes>
+    </test>
+
+    <test name="Add To Cart Test">
+        <classes>
+            <class name="uiTests.AddToCartTest"/>
         </classes>
     </test>
 
@@ -31,5 +59,11 @@
             <class name="uiTests.ProductReviewTest"/>
         </classes>
     </test>
-    
+
+    <test name="Test Cases Page Test">
+        <classes>
+            <class name="uiTests.TestCasesPageTest"/>
+        </classes>
+    </test>
+
 </suite>

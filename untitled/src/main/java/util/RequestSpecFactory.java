@@ -17,6 +17,14 @@ public class RequestSpecFactory {
                 .build();
     }
 
+    public static RequestSpecification formDataSpec() {
+        return new RequestSpecBuilder()
+                .setBaseUri(BASE_URL)
+                .setContentType(ContentType.URLENC)
+                .addHeader("User-Agent", "RestAssured")
+                .build();
+    }
+
     public static RequestSpecification customSpec(String baseUrl) {
         return new RequestSpecBuilder()
                 .setBaseUri(baseUrl)

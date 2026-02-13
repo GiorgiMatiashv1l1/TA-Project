@@ -21,9 +21,9 @@ public class LoginPage extends BasePage{
 
     private final static String URL = "https://automationexercise.com/login";
 
-    private final By email = By.xpath("//input[@data-qa='login-email']\n");
-    private final By password = By.xpath("//input[@data-qa='login-password']\n");
-    private final By loginBtn = By.xpath("//button[@data-qa='login-button']\n");
+    private final By email = By.xpath("//input[@data-qa='login-email']");
+    private final By password = By.xpath("//input[@data-qa='login-password']");
+    private final By loginBtn = By.xpath("//button[@data-qa='login-button']");
 
     private final By loginFormHeading = By.xpath("//h2[text()='Login to your account']");
 
