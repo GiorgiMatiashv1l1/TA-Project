@@ -1,6 +1,7 @@
 package client;
 
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import model.Product;
 import util.RequestSpecFactory;
 
@@ -15,35 +16,78 @@ public class ProductClient {
                 .get("/api/productsList");
     }
 
+    public Response getAllProductsWithPost() {
+        // API 2: POST to productsList returns 405 Method Not Allowed
+        return given()
+                .spec(RequestSpecFactory.defaultJsonSpec())
+                .when()
+                .post("/api/productsList");
+    }
+
+    public Response getAllBrands() {
+        return given()
+                .spec(RequestSpecFactory.defaultJsonSpec())
+                .when()
+                .get("/api/brandsList");
+    }
+
+    public Response searchProduct(String productName) {
+        return given()
+                .spec(RequestSpecFactory.formDataSpec())
+                .formParam("search_product", productName)
+                .when()
+                .post("/api/searchProduct");
+    }
+
+    public Response searchProductWithoutParam() {
+        return given()
+                .spec(RequestSpecFactory.formDataSpec())
+                .when()
+                .post("/api/searchProduct");
+    }
+
     public Response createProduct(Product product) {
-        return given()
-                .spec(RequestSpecFactory.defaultJsonSpec())
-                .body(product)
-                .when()
-                .post("/product");
+        RequestSpecification spec = given()
+                .spec(RequestSpecFactory.formDataSpec());
+
+        if (product.getName() != null)  spec = spec.formParam("name", product.getName());
+        if (product.getPrice() != null) spec = spec.formParam("price", product.getPrice());
+        if (product.getBrand() != null) spec = spec.formParam("brand", product.getBrand());
+        if (product.getCategory() != null) {
+            if (product.getCategory().getCategory() != null)
+                spec = spec.formParam("category", product.getCategory().getCategory());
+            if (product.getCategory().getUsertype() != null
+                    && product.getCategory().getUsertype().getUsertype() != null)
+                spec = spec.formParam("usertype", product.getCategory().getUsertype().getUsertype());
+        }
+
+        return spec.when().post("/api/createProduct");
     }
 
-    public Response getProduct(int productId) {
+    public Response deleteProduct(String email, String password) {
         return given()
-                .spec(RequestSpecFactory.defaultJsonSpec())
-                .pathParam("productId", productId)
+                .spec(RequestSpecFactory.formDataSpec())
+                .formParam("email", email)
+                .formParam("password", password)
                 .when()
-                .get("/product/{productId}");
+                .delete("/api/deleteAccount");
     }
 
-    public Response updateProduct(Product product) {
+    public Response verifyLogin(String email, String password) {
         return given()
-                .spec(RequestSpecFactory.defaultJsonSpec())
-                .body(product)
+                .spec(RequestSpecFactory.formDataSpec())
+                .formParam("email", email)
+                .formParam("password", password)
                 .when()
-                .put("/product");
+                .post("/api/verifyLogin");
     }
 
-    public Response deleteProduct(int productId) {
+    public Response verifyLoginWithInvalidDetails(String email, String password) {
         return given()
-                .spec(RequestSpecFactory.defaultJsonSpec())
-                .pathParam("productId", productId)
+                .spec(RequestSpecFactory.formDataSpec())
+                .formParam("email", email)
+                .formParam("password", password)
                 .when()
-                .delete("/product/{productId}");
+                .post("/api/verifyLogin");
     }
 }
