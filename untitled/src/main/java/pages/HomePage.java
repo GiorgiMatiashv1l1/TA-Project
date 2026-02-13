@@ -15,6 +15,11 @@ public class HomePage extends BasePage {
 
     private static final String URL = "https://automationexercise.com";
 
+    private final By productsLinkBy   = By.cssSelector("a[href='/products']");
+    private final By testCasesLinkBy  = By.cssSelector("a[href='/test_cases']");
+    private final By loginSignupLinkBy = By.cssSelector("a[href='/login']");
+    private final By logoutLinkBy     = By.cssSelector("a[href='/logout']");
+
     @FindBy(css = "a[href='/logout']")
     WebElement logoutBtn;
 
@@ -43,11 +48,11 @@ public class HomePage extends BasePage {
     }
 
     public void clickLoginSignup() {
-        loginSignupLink.click();
+        jsClick(loginSignupLinkBy);
     }
 
     public void logout() {
-        logoutBtn.click();
+        jsClick(logoutLinkBy);
     }
 
     public boolean isLoggedInAsVisible() {
@@ -55,10 +60,10 @@ public class HomePage extends BasePage {
     }
 
     public void openProducts() {
-        productsLink.click();
+        jsClick(productsLinkBy);
     }
 
     public void openTestCases() {
-        testCasesLink.click();
+        jsClick(testCasesLinkBy);
     }
 }

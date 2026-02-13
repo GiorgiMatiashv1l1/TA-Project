@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
@@ -48,16 +49,16 @@ public class ProductsPage extends BasePage {
     }
 
     public boolean isAllProductsPageVisible() {
-        return driver.getCurrentUrl().contains("/products");
+        return wait.until(ExpectedConditions.urlContains("/products"));
     }
 
       public boolean isSearchedProductsTitleVisible() {
-        String title = getText(pageTitle);
-        return title.contains("SEARCHED PRODUCTS");
+          wait.until(ExpectedConditions.textToBe(pageTitle, "SEARCHED PRODUCTS"));
+          return true;
       }
 
     public void openFirstProduct() {
-        firstProduct.click();
+        jsClick(By.cssSelector("a[href^='/product_details']"));
     }
 
     public void searchProduct(String product) {
@@ -77,7 +78,11 @@ public class ProductsPage extends BasePage {
         WebElement card = cards.get(index);
         js.executeScript("arguments[0].scrollIntoView({block:'center'});", card);
         new Actions(driver).moveToElement(card).perform();
-        card.findElement(By.cssSelector(".add-to-cart")).click();
+
+        List<WebElement> addBtns = card.findElements(By.cssSelector(".add-to-cart"));
+        WebElement addBtn = addBtns.get(addBtns.size() - 1);
+
+        js.executeScript("arguments[0].click();", addBtn);
     }
 
     public void hoverAndAddFirstProductToCart() {
@@ -89,10 +94,14 @@ public class ProductsPage extends BasePage {
     }
 
     public void clickContinueShopping() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(continueShoppingBtn));
         click(continueShoppingBtn);
+
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(continueShoppingBtn));
     }
 
     public void clickViewCart() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(viewCartLink));
         click(viewCartLink);
     }
 }

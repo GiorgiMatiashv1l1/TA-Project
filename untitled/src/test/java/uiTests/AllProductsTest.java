@@ -7,6 +7,7 @@ import io.qameta.allure.Story;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.HomePage;
+import pages.ProductDetailPage;
 import pages.ProductsPage;
 
 @Epic("UI Test")
@@ -16,15 +17,20 @@ public class AllProductsTest extends BaseTest {
     @Test
     @Story("Test Case 8 - Verify All Products And Product Detail Page")
     public void allProductsTest() {
-        driver.get("https://automationexercise.com");
-
         HomePage homePage = new HomePage(driver);
         ProductsPage productsPage = new ProductsPage(driver);
+        ProductDetailPage productDetailPage = new ProductDetailPage(driver);
+
+        homePage.open();
+        Assert.assertTrue(homePage.isHomePageVisible());
+
 
         homePage.openProducts();
-
+        Assert.assertTrue(productsPage.isAllProductsPageVisible());
         Assert.assertTrue(productsPage.areProductsVisible());
 
         productsPage.openFirstProduct();
+        Assert.assertTrue(productDetailPage.isProductDetailPageVisible());
+        Assert.assertTrue(productDetailPage.areAllProductDetailsVisible());
     }
 }

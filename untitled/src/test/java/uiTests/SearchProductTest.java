@@ -16,16 +16,18 @@ public class SearchProductTest extends BaseTest {
     @Test
     @Story("Test Case 9 - Search Product")
     public void searchProductTest() {
-        driver.get("https://automationexercise.com");
-
         HomePage homePage = new HomePage(driver);
         ProductsPage productsPage = new ProductsPage(driver);
 
-        homePage.openProducts();
+        homePage.open();
+        Assert.assertTrue(homePage.isHomePageVisible());
 
-        Assert.assertTrue(productsPage.areProductsVisible());
+        homePage.openProducts();
+        Assert.assertTrue(productsPage.isAllProductsPageVisible());
 
         productsPage.searchProduct("Dress");
+
+        Assert.assertTrue(productsPage.isSearchedProductsTitleVisible());
 
         Assert.assertTrue(productsPage.areProductsVisible());
     }

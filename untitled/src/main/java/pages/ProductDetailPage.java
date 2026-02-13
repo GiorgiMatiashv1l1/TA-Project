@@ -2,6 +2,7 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class ProductDetailPage extends BasePage {
 
@@ -17,7 +18,7 @@ public class ProductDetailPage extends BasePage {
     private final By brand           = By.xpath("//div[@class='product-information']/p/b[text()='Brand:']/parent::p");
 
     public boolean isProductDetailPageVisible() {
-        return driver.getCurrentUrl().contains("/product_details/");
+        return wait.until(ExpectedConditions.urlContains("/product_details/"));
     }
 
     public boolean areAllProductDetailsVisible() {
