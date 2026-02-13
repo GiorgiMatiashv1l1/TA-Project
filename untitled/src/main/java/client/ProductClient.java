@@ -90,4 +90,12 @@ public class ProductClient {
                 .when()
                 .post("/api/verifyLogin");
     }
+
+    public Response searchProduct(String searchProduct) {
+        return given()
+                .spec(RequestSpecFactory.defaultJsonSpec())
+                .queryParam("search_product", searchProduct)
+                .when()
+                .post("/api/searchProduct");
+    }
 }
